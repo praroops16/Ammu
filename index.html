@@ -6,10 +6,8 @@
 <title>Ammu 🤍</title>
 
 <style>
-/* Disable text selection & long press */
 * {
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
 }
@@ -38,62 +36,42 @@ h1 {
   margin-bottom: 10px;
 }
 
-/* Whisper text */
-.whisper {
-  font-size: 0.9rem;
-  opacity: 0;
-  margin-bottom: 10px;
-  transition: opacity 2s ease;
-}
-
-/* Typing */
 .typing {
   font-size: 1.05rem;
   min-height: 40px;
   opacity: 0.9;
 }
 
-/* Hug emoji */
 .hug {
   font-size: 90px;
-  margin: 20px 0;
-  transition: all 0.3s ease;
+  margin: 10px 0;
+  transition: transform 0.8s ease, opacity 0.3s ease;
   filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
-  -webkit-tap-highlight-color: transparent;
 }
 
 .hug.holding {
-  transform: scale(1.5);
+  transform: scale(1.6);
   opacity: 0;
 }
 
-/* GIF hug */
+/* ✅ FIXED GIF */
 .hug-gif {
-  width: 200px;
+  width: 240px;
+  max-width: 75vw;
   border-radius: 20px;
-  margin: 15px auto;
+  margin: 5px auto 25px; /* tight top, good bottom space */
   display: none;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transform: translateY(-15px); /* lifted */
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-/* Message */
 .message {
   font-size: 1rem;
   line-height: 1.6;
   opacity: 0.95;
-  transition: opacity 0.3s;
 }
 
-/* Hidden message */
-.hidden {
-  opacity: 0;
-  margin-top: 10px;
-  font-size: 0.95rem;
-  transition: opacity 2s ease;
-}
-
-/* Button */
 .hold-btn {
   margin-top: 25px;
   padding: 14px 22px;
@@ -103,10 +81,13 @@ h1 {
   backdrop-filter: blur(10px);
   color: white;
   font-size: 1rem;
-  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.4s ease;
 }
 
-/* Floating hearts */
+.hold-btn.hidden {
+  opacity: 0;
+}
+
 .heart {
   position: absolute;
   font-size: 16px;
@@ -129,10 +110,8 @@ h1 {
 
   <div class="typing" id="typing"></div>
 
-  <!-- Emoji hug -->
   <div class="hug" id="hug">🫂</div>
 
-  <!-- GIF hug -->
   <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2x3Z2dydWtodTlnNWZ0cGJmYmdzMTEwcGhsbG52emkzdm02ZngydiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1JmGiBtqTuehfYxuy9/giphy.gif"
        class="hug-gif" id="hugGif">
 
@@ -141,9 +120,7 @@ h1 {
     Come here… just stay for a second.
   </div>
 
-
-
-  <button class="hold-btn"
+  <button class="hold-btn" id="btn"
     ontouchstart="startHug(); return false;"
     ontouchend="endHug(); return false;"
     onmousedown="startHug(); return false;"
@@ -153,11 +130,6 @@ h1 {
 </div>
 
 <script>
-// Whisper fade-in
-setTimeout(() => {
-  document.getElementById("whisper").style.opacity = 1;
-}, 800);
-
 // Typing
 const text = "Come here… I just want to hold you for a bit.";
 let i = 0;
@@ -170,12 +142,7 @@ function typeWriter() {
 }
 typeWriter();
 
-// Hidden message after 5 sec
-setTimeout(() => {
-  document.getElementById("hiddenMsg").style.opacity = 1;
-}, 5000);
-
-// Floating hearts
+// Hearts
 function createHeart() {
   const heart = document.createElement("div");
   heart.classList.add("heart");
@@ -190,10 +157,15 @@ setInterval(createHeart, 500);
 // Hug interaction
 function startHug() {
   document.getElementById("hug").classList.add("holding");
+  document.getElementById("btn").classList.add("hidden");
 
   const gif = document.getElementById("hugGif");
   gif.style.display = "block";
-  setTimeout(() => gif.style.opacity = 1, 50);
+
+  setTimeout(() => {
+    gif.style.opacity = 1;
+    gif.style.transform = "translateY(-15px)";
+  }, 100);
 
   document.getElementById("message").innerHTML =
     "I’ve got you… 🤍<br><br>" +
@@ -211,10 +183,15 @@ function startHug() {
 
 function endHug() {
   document.getElementById("hug").classList.remove("holding");
+  document.getElementById("btn").classList.remove("hidden");
 
   const gif = document.getElementById("hugGif");
   gif.style.opacity = 0;
-  setTimeout(() => gif.style.display = "none", 500);
+
+  setTimeout(() => {
+    gif.style.display = "none";
+    gif.style.transform = "translateY(-15px)";
+  }, 600);
 
   document.getElementById("message").innerHTML =
     "Don’t go too far… okay? 🤍<br><br>" +
