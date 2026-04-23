@@ -1,110 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>A Hug for You 🤍</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-      font-family: 'Segoe UI', sans-serif;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ammu 🤍</title>
 
-    .container {
-      text-align: center;
-      color: #fff;
-      animation: fadeIn 2s ease-in-out;
-    }
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(160deg, #2b1055, #7597de, #ffafbd);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow: hidden;
+  color: white;
+  transition: background 0.6s ease;
+}
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
+.container {
+  text-align: center;
+  width: 90%;
+  max-width: 420px;
+}
 
-    p {
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
+h1 {
+  font-size: 1.9rem;
+  margin-bottom: 10px;
+}
 
-    .hug {
-      font-size: 80px;
-      margin: 20px 0;
-      animation: hugMove 1.5s infinite alternate ease-in-out;
-    }
+/* Whisper text */
+.whisper {
+  font-size: 0.9rem;
+  opacity: 0;
+  margin-bottom: 10px;
+  transition: opacity 2s ease;
+}
 
-    @keyframes hugMove {
-      from {
-        transform: scale(1);
-      }
-      to {
-        transform: scale(1.2);
-      }
-    }
+/* Typing */
+.typing {
+  font-size: 1.05rem;
+  min-height: 40px;
+  opacity: 0.9;
+}
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+/* Hug emoji */
+.hug {
+  font-size: 90px;
+  margin: 20px 0;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+}
 
-    .heart {
-      position: absolute;
-      font-size: 20px;
-      animation: float 5s linear infinite;
-      opacity: 0.7;
-    }
+.hug.holding {
+  transform: scale(1.5);
+  opacity: 0;
+}
 
-    @keyframes float {
-      0% {
-        transform: translateY(100vh);
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-10vh);
-        opacity: 0;
-      }
-    }
-  </style>
+/* GIF hug */
+.hug-gif {
+  width: 200px;
+  border-radius: 20px;
+  margin: 15px auto;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+/* Message */
+.message {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.95;
+  transition: opacity 0.3s;
+}
+
+/* Hidden message */
+.hidden {
+  opacity: 0;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  transition: opacity 2s ease;
+}
+
+/* Button */
+.hold-btn {
+  margin-top: 25px;
+  padding: 14px 22px;
+  border-radius: 30px;
+  border: none;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-size: 1rem;
+}
+
+/* Hearts */
+.heart {
+  position: absolute;
+  font-size: 16px;
+  animation: float 6s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
-  <h1>For Ammu 🤍</h1>
-  <div class="hug">🤗</div>
-  <p>Come here… this is your hug.</p>
-  <p>Whenever you need it, just open this again.</p>
-  <p>I miss you, but I’m always right here with you.</p>
+  <h1>Ammu… 🤍</h1>
+
+  <div class="whisper" id="whisper">I love you ponnu… 🤍</div>
+
+  <div class="typing" id="typing"></div>
+
+  <!-- Emoji hug -->
+  <div class="hug" id="hug">🫂</div>
+
+  <!-- GIF hug -->
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2x3Z2dydWtodTlnNWZ0cGJmYmdzMTEwcGhsbG52emkzdm02ZngydiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1JmGiBtqTuehfYxuy9/giphy.gif"
+       class="hug-gif" id="hugGif">
+
+  <div class="message" id="message">
+    I miss you… more than I say sometimes. 🤍<br><br>
+    Come here… just stay for a second.
+  </div>
+
+  <div class="hidden" id="hiddenMsg">
+    I wish you were here with me right now… 💭
+  </div>
+
+  <button class="hold-btn"
+    ontouchstart="startHug()"
+    ontouchend="endHug()"
+    onmousedown="startHug()"
+    onmouseup="endHug()">
+    Hold me 🤍
+  </button>
 </div>
 
 <script>
-  // floating hearts
-  function createHeart() {
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.innerHTML = "🤍";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-    document.body.appendChild(heart);
+// Whisper fade-in
+setTimeout(() => {
+  document.getElementById("whisper").style.opacity = 1;
+}, 800);
 
-    setTimeout(() => {
-      heart.remove();
-    }, 5000);
+// Typing
+const text = "Come here… I just want to hold you for a bit.";
+let i = 0;
+function typeWriter() {
+  if (i < text.length) {
+    document.getElementById("typing").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter, 35);
   }
+}
+typeWriter();
 
-  setInterval(createHeart, 400);
+// Hidden message after 5 sec
+setTimeout(() => {
+  document.getElementById("hiddenMsg").style.opacity = 1;
+}, 5000);
+
+// Floating hearts
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML = "🤍";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 7000);
+}
+setInterval(createHeart, 500);
+
+// Hug interaction
+function startHug() {
+  document.getElementById("hug").classList.add("holding");
+
+  const gif = document.getElementById("hugGif");
+  gif.style.display = "block";
+  setTimeout(() => gif.style.opacity = 1, 50);
+
+  document.getElementById("message").innerHTML =
+    "I’ve got you… 🤍<br><br>" +
+    "It’s okay… just stay here.<br>" +
+    "I miss you… I really do.<br><br>" +
+    "I love you ponnu.";
+
+  document.body.style.background =
+    "linear-gradient(160deg, #1a082e, #3a1c71, #ff9a9e)";
+
+  if (navigator.vibrate) {
+    navigator.vibrate([30, 50, 30]);
+  }
+}
+
+function endHug() {
+  document.getElementById("hug").classList.remove("holding");
+
+  const gif = document.getElementById("hugGif");
+  gif.style.opacity = 0;
+  setTimeout(() => gif.style.display = "none", 500);
+
+  document.getElementById("message").innerHTML =
+    "Don’t go too far… okay? 🤍<br><br>" +
+    "Come back whenever you need me.";
+
+  document.body.style.background =
+    "linear-gradient(160deg, #2b1055, #7597de, #ffafbd)";
+}
 </script>
 
 </body>
