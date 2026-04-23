@@ -6,6 +6,14 @@
 <title>Ammu 🤍</title>
 
 <style>
+/* Disable text selection & long press */
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 body {
   margin: 0;
   height: 100vh;
@@ -51,6 +59,7 @@ h1 {
   margin: 20px 0;
   transition: all 0.3s ease;
   filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+  -webkit-tap-highlight-color: transparent;
 }
 
 .hug.holding {
@@ -94,9 +103,10 @@ h1 {
   backdrop-filter: blur(10px);
   color: white;
   font-size: 1rem;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Hearts */
+/* Floating hearts */
 .heart {
   position: absolute;
   font-size: 16px;
@@ -138,10 +148,10 @@ h1 {
   </div>
 
   <button class="hold-btn"
-    ontouchstart="startHug()"
-    ontouchend="endHug()"
-    onmousedown="startHug()"
-    onmouseup="endHug()">
+    ontouchstart="startHug(); return false;"
+    ontouchend="endHug(); return false;"
+    onmousedown="startHug(); return false;"
+    onmouseup="endHug(); return false;">
     Hold me 🤍
   </button>
 </div>
@@ -212,7 +222,7 @@ function endHug() {
 
   document.getElementById("message").innerHTML =
     "Don’t go too far… okay? 🤍<br><br>" +
-    "Come back here whenever you need me.";
+    "Come back whenever you need me.";
 
   document.body.style.background =
     "linear-gradient(160deg, #2b1055, #7597de, #ffafbd)";
